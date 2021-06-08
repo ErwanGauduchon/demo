@@ -48,6 +48,6 @@ jobs:
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: Package
+          name: Package-java${{ matrix.Java }}
           path: target/demo-1.0.jar
         
