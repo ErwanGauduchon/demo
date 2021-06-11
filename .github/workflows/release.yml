@@ -28,7 +28,7 @@ jobs:
       uses: docker://decathlon/release-notes-generator-action:2.0.1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        OUTPUT_FOLDER: target
+        OUTPUT_FOLDER: temp_release_notes
     - name: Set the tag value
       run: |
         echo "tag=$(cat pom.xml | grep "<version>.*</version>" | head -1 |awk -F'[><]' '{print $3}')" >> $GITHUB_ENV
