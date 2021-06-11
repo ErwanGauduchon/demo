@@ -28,8 +28,7 @@ jobs:
       uses: docker://decathlon/release-notes-generator-action:2.0.1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        OUTPUT_FOLDER: temp_release_notes
-        FILENAME: release
+        OUTPUT_FOLDER: target
     - name: Set the tag value
       run: |
         echo "tag=$(cat pom.xml | grep "<version>.*</version>" | head -1 |awk -F'[><]' '{print $3}')" >> $GITHUB_ENV
@@ -44,9 +43,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        artifact: "target/demo-${{ env.tag }}.jar"
+        artifacts: "target/demo-${{ env.tag }}.jar"
         tag: ${{ env.tag }}
         name: demo ${{ env.tag }}
-        bodyFile: temp_release_notes/release.md
+        bodyFile: target/release_file.md
         draft: true
         token: ${{ secrets.GITHUB_TOKEN }}
