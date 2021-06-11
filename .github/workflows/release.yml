@@ -1,0 +1,52 @@
+name: Release
+
+# Trigger the workflow on milestone events
+on: 
+  milestone:
+    types: [closed]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v2
+    - name: Setup java
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+    - name: Cache Maven packages
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+    - name: Build with Maven
+      run: mvn -B clean package
+    - name: Create Release Notes
+      uses: docker://decathlon/release-notes-generator-action:2.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        OUTPUT_FOLDER: temp_release_notes
+        FILENAME: release
+    - name: Set the tag value
+      run: |
+        echo "tag=$(cat pom.xml | grep "<version>.*</version>" | head -1 |awk -F'[><]' '{print $3}')" >> $GITHUB_ENV
+    - name: Create a tag for the release
+      run: |
+        git config --global user.name "ErwanGauduchon"
+        git config --global user.email 49336970+ErwanGauduchon@users.noreply.github.com
+        git tag -a ${{ env.tag }} -m "Release ${{ env.tag }}"
+        git push origin ${{ env.tag }}
+    - name: Create GitHub Release
+      uses: ncipollo/release-action@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        artifact: "target/demo-${{ env.tag }}.jar"
+        tag: ${{ env.tag }}
+        name: demo ${{ env.tag }}
+        bodyFile: temp_release_notes/release.md
+        draft: true
+        token: ${{ secrets.GITHUB_TOKEN }}
