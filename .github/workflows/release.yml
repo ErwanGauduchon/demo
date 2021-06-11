@@ -46,6 +46,6 @@ jobs:
         artifacts: "target/demo-${{ env.tag }}.jar"
         tag: ${{ env.tag }}
         name: demo ${{ env.tag }}
-        bodyFile: target/release_file.md
+        bodyFile: "temp_release_notes/release_file.md"
         draft: true
         token: ${{ secrets.GITHUB_TOKEN }}
