@@ -21,7 +21,9 @@ jobs:
           if [ "$milestones" != "[]" ]
           then
             milestone_number=$(echo "$milestones" | jq -r '.[0].number')
-            curl -X PATCH \
+            curl -s \
+              -X PATCH \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               -H "Accept: application/vnd.github.v3+json" \
               https://api.github.com/repos/${{ github.repository }}/milestones/${milestone_number} \
               -d '{"state":"closed"}'
