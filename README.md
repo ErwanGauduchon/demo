@@ -5,4 +5,4 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ErwanGauduchon_demo&metric=coverage)](https://sonarcloud.io/dashboard?id=ErwanGauduchon_demo)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=ErwanGauduchon_demo&metric=sqale_index)](https://sonarcloud.io/dashboard?id=ErwanGauduchon_demo)
 
-A maven project for testing github actions
+A maven project for testing github actions.
